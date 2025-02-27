@@ -17,44 +17,30 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Sternenhimmel */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('stars.png') repeat;
-            opacity: 0.7;
-        }
-
         .space-container {
             position: relative;
             width: 100vw;
             height: 100vh;
+        }
+
+        /* Große Planeten */
+        .planet {
+            position: absolute;
+            width: 100px;
+            height: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        /* Planeten */
-        .planet {
-            position: absolute;
-            width: 120px;
-            height: 120px;
             text-align: center;
             color: white;
             font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border-radius: 50%;
+            border: 2px solid white;
         }
 
         #saturn {
-            background: none;
             top: 30%;
-            left: 20%;
-            width: 150px;
-            height: 150px;
+            left: 25%;
         }
 
         #saturn img {
@@ -68,33 +54,45 @@
             width: 100%;
             text-align: center;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         #earth {
             background: radial-gradient(circle, #2ecc71, #145a32);
-            bottom: 20%;
-            right: 20%;
-            border-radius: 50%;
+            bottom: 15%;
+            right: 25%;
         }
 
-        /* Projekte, die kreisen */
+        #mars {
+            background: radial-gradient(circle, #e74c3c, #a93226);
+            top: 20%;
+            right: 35%;
+        }
+
+        /* Orbit */
+        .orbit-container {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .orbit {
             position: absolute;
-            width: 400px;
-            height: 400px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            animation: rotate 10s linear infinite;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            animation: rotate-orbit 12s linear infinite;
         }
 
-        .orbit.paused {
-            animation-play-state: paused;
-        }
-
+        /* Kleine Planeten */
         .project {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -102,9 +100,10 @@
             align-items: center;
             text-align: center;
             color: white;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             background: rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
         }
 
         .project img {
@@ -113,38 +112,97 @@
             border-radius: 50%;
         }
 
+        /* Animation für kleine Planeten */
+        @keyframes rotate-orbit {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes rotate-projects {
+            0% { transform: rotate(0deg) translateX(90px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(90px) rotate(-360deg); }
+        }
+
+        .orbit .project {
+            animation: rotate-projects 12s linear infinite;
+        }
+
+        /* Hover-Effekt */
         .project:hover {
-            transform: scale(1.2) rotate(10deg);
+            width: 70px;
+            height: 70px;
+            transform: scale(1.3);
+            animation-play-state: paused;
         }
 
-        /* Positionierung der Projekte */
-        .project:nth-child(1) { top: 0; left: 50%; }
-        .project:nth-child(2) { top: 50%; right: 0; }
-        .project:nth-child(3) { bottom: 0; left: 50%; }
-        .project:nth-child(4) { top: 50%; left: 0; }
-
-        /* Orbit-Animation */
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .orbit:hover .project {
+            animation-play-state: paused !important;
         }
+
+        .project:hover .info-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Info-Box */
+        .info-box {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            width: 150px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
     </style>
 </head>
 <body>
-
     <div class="space-container">
+        <!-- Große Planeten -->
         <div id="saturn" class="planet">
             <img src="saturn.png" alt="Saturn">
         </div>
-        <div class="orbit" id="orbit1" style="top: 15%; left: 15%;">
-            <div class="project" onclick="openProject('panel.jojosstudio.de')">Aula Panel <img src="projekt1.jpg" onerror="this.style.display='none';"></div>
-            <div class="project" onclick="openProject('vocab.jojosstudio.de')">Vocabel Trainer <img src="projekt2.jpg" onerror="this.style.display='none';"></div>
+
+        <div id="mars" class="planet">Mars</div>
+
+        <!-- Orbit um Saturn -->
+        <div class="orbit-container" style="top: 28%; left: 24%;">
+            <div class="orbit">
+                <div class="project" onclick="openProject('panel.jojosstudio.de')">
+                    <img src="projekt1.jpg" onerror="this.style.display='none';">
+                    <div class="info-box">Aula Panel - Verwaltungssystem</div>
+                </div>
+                <div class="project" onclick="openProject('vocab.jojosstudio.de')">
+                    <img src="projekt2.jpg" onerror="this.style.display='none';">
+                    <div class="info-box">Vokabel Trainer - Lerne effizient!</div>
+                </div>
+            </div>
         </div>
 
+        <!-- Erde & Privatprojekte -->
         <div id="earth" class="planet">Private Projekte</div>
-        <div class="orbit" id="orbit2" style="bottom: 10%; right: 10%;">
-            <div class="project" onclick="openProject('https://privatprojekt1.de')">Privat 1 <img src="privat1.jpg" onerror="this.style.display='none';"></div>
-            <div class="project" onclick="openProject('https://privatprojekt2.de')">Privat 2 <img src="privat2.jpg" onerror="this.style.display='none';"></div>
+        <div class="orbit-container" style="bottom: 13%; right: 23%;">
+            <div class="orbit">
+                <div class="project" onclick="openProject('https://privatprojekt1.de')">
+                    <img src="privat1.jpg" onerror="this.style.display='none';">
+                    <div class="info-box">Privatprojekt 1 - Geheim ;)</div>
+                </div>
+                <div class="project" onclick="openProject('https://privatprojekt2.de')">
+                    <img src="privat2.jpg" onerror="this.style.display='none';">
+                    <div class="info-box">Privatprojekt 2 - Work in Progress</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -152,16 +210,6 @@
         function openProject(url) {
             window.open(url, "_blank");
         }
-
-        document.querySelectorAll('.orbit').forEach(orbit => {
-            orbit.addEventListener('mouseenter', () => {
-                orbit.classList.add('paused');
-            });
-            orbit.addEventListener('mouseleave', () => {
-                orbit.classList.remove('paused');
-            });
-        });
     </script>
-
 </body>
 </html>
